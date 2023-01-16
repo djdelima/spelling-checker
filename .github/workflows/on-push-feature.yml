@@ -1,7 +1,7 @@
 name: On push non-main
 on:
   push:
-    branches:
+    branches-ignore:
       - main
 jobs:
   build-and-test:
