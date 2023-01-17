@@ -18,9 +18,9 @@ export class GrammarBotClient {
           Authorization: `Token ${this.apiKey}`,
         },
       });
-      return response.body;
+      return JSON.parse(response.body);
     } catch (error) {
-      throw new Error(`Error checking grammar: ${error.message}`);
+      throw new Error(`Error checking grammar: ${(error as Error).message}`);
     }
   }
 }
