@@ -51,11 +51,14 @@ describe('Grammar Bot Client', () => {
     expect(response).toEqual(mockResponse);
   });
 
-  // it('should throw an error when the API returns a non-200 status code', async () => {
-  //   const text = 'This is a sample text';
-  //   got.post = jest.fn().mockRejectedValue(new Error('non-200 status code'));
-  //   await expect(connector.checkGrammar(text)).rejects.toThrowError(
-  //     'Error checking grammar: non-200 status code',
-  //   );
-  // });
+  it('should throw an error when the API returns a non-200 status code', async () => {
+    const scope = nock('https://api.grammarbot.io')
+      .post('/v2/check')
+      .reply(400, { error: 'bad request' });
+
+    await expect(connector.checkGrammar(text)).rejects.toThrowError(
+      'Error checking grammar: Response code 400 (Bad Request)',
+    );
+    scope.done();
+  });
 });
