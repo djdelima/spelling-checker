@@ -34,10 +34,13 @@ export class SpellingService {
         };
       },
     );
-    return {
+
+    const spellValidation: SpellValidation = {
       id: 'unique-identifier',
       info: { words: text.split(' ').length, time: new Date().toString() },
       issues,
     };
+
+    return spellValidation;
   }
 }
