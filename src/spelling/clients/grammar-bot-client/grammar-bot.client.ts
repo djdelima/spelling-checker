@@ -2,7 +2,9 @@ import got from 'got';
 import { Options, Response } from 'got';
 import { IGrammarBotClient } from './interfaces';
 import { envConfig } from '../../../env.config';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class GrammarBotClient implements IGrammarBotClient {
   async checkGrammar(
     text: string,

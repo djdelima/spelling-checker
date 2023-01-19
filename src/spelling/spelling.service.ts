@@ -37,7 +37,10 @@ export class SpellingService {
 
     const spellValidation: SpellValidation = {
       id: 'unique-identifier',
-      info: { words: text.split(' ').length, time: new Date().toString() },
+      info: {
+        words: text.split(' ').length,
+        time: new Date().toString(),
+      },
       issues,
     };
 
