@@ -1,14 +1,13 @@
 import got from 'got';
 import { Options, Response } from 'got';
 import { IGrammarBotClient } from './interfaces';
-import { GrammarBotResponse } from './types';
 import { envConfig } from '../../../env.config';
 
 export class GrammarBotClient implements IGrammarBotClient {
   async checkGrammar(
     text: string,
     language = 'en-US',
-  ): Promise<Response<GrammarBotResponse>> {
+  ): Promise<Response<string>> {
     try {
       const encodedParams = new URLSearchParams();
       encodedParams.append('text', text);
@@ -25,10 +24,9 @@ export class GrammarBotClient implements IGrammarBotClient {
         body: encodedParams.toString(),
       };
 
-      return (await got(
-        'https://grammarbot.p.rapidapi.com/check',
-        options,
-      )) as Response<GrammarBotResponse>;
+      const response = (await got(options)) as Response<string>;
+
+      return response;
     } catch (error) {
       throw new Error(`Error checking grammar: ${(error as Error).message}`);
     }

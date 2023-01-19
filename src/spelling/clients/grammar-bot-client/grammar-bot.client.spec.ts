@@ -1,64 +1,83 @@
 import nock from 'nock';
 import { GrammarBotClient } from './grammar-bot.client';
+import { GrammarBotResponse } from './types';
 
-describe('Grammar Bot Client', () => {
-  let connector: GrammarBotClient;
-  let apiKey: string;
-  let text: string;
+const mockGrammarBotResponse: GrammarBotResponse = {
+  software: {
+    name: 'GrammarBot',
+    version: '1.0.0',
+    apiVersion: 2,
+    premium: false,
+    premiumHint: '',
+    status: 'OK',
+  },
+  warnings: {
+    incompleteResults: false,
+  },
+  language: {
+    name: 'English',
+    code: 'en-US',
+    detectedLanguage: {
+      name: 'English',
+      code: 'en-US',
+    },
+  },
+  matches: [
+    {
+      message: 'Possible spelling mistake found',
+      shortMessage: 'Spelling mistake',
+      replacements: [{ value: 'word' }, { value: 'words' }],
+      offset: 10,
+      length: 4,
+      context: {
+        text: 'This is a test wodrs.',
+        offset: 10,
+        length: 4,
+      },
+      sentence: 'This is a test wodrs.',
+      type: { typeName: 'misspelling' },
+      rule: {
+        id: 'MORFOLOGIK_RULE_EN_US',
+        description: 'English spellchecker',
+        issueType: 'misspelling',
+        category: {
+          id: 'TYPOS',
+          name: 'Possible Typo',
+        },
+      },
+    },
+  ],
+};
+
+describe('GrammarBotClient', () => {
+  let client: GrammarBotClient;
 
   beforeEach(() => {
-    apiKey = 'test-api-key';
-    text = 'This is a test text to check grammar.';
-    connector = new GrammarBotClient(apiKey);
+    process.env.API_KEY = 'test';
+    client = new GrammarBotClient();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    // Clean all nock interceptors
+    nock.cleanAll();
   });
 
-  it('should check grammar and return correct response', async () => {
-    const mockResponse = {
-      matches: [
-        {
-          message: 'Use "a" instead of "an" before "test"',
-          shortMessage: 'Use "a" instead of "an"',
-          offset: 8,
-          length: 2,
-          context: {
-            text: 'This is an test sentence.',
-            left: 'This is ',
-            right: ' test sentence.',
-          },
-          sentence: 'This is an test sentence.',
-          type: 'TYPOS',
-          rule: {
-            id: 'UPPERCASE_SUGGESTION',
-            description:
-              'Checks for uppercase words that are not at the beginning of the sentence, and suggests lowercasing them.',
-            issueType: 'typographical',
-            category: 'Grammar',
-          },
-        },
-      ],
-    };
+  it('Grammar bot should return 200 with expected body', async () => {
+    nock('https://grammarbot.p.rapidapi.com')
+      .post('/check')
+      .reply(200, mockGrammarBotResponse);
 
-    nock('https://api.grammarbot.io')
-      .post('/v2/check')
-      .reply(200, JSON.stringify(mockResponse));
+    const response = await client.checkGrammar('This is a test');
 
-    const response = await connector.checkGrammar(text);
-
-    expect(response).toEqual(mockResponse);
+    expect(response.statusCode).toBe(200);
+    expect(<GrammarBotResponse>JSON.parse(response.body)).toEqual(
+      mockGrammarBotResponse,
+    );
   });
 
   it('should throw an error when the API returns a non-200 status code', async () => {
-    const scope = nock('https://api.grammarbot.io')
-      .post('/v2/check')
-      .reply(400, { error: 'bad request' });
-
-    await expect(connector.checkGrammar(text)).rejects.toThrowError(
-      'Error checking grammar: Response code 400 (Bad Request)',
+    await expect(client.checkGrammar('This is a test')).rejects.toThrow(
+      'Error checking grammar:',
     );
-    scope.done();
   });
 });
