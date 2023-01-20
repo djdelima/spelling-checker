@@ -29,12 +29,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create tag
-          run: |
-            TAG=$(echo ${GITHUB_SHA} | cut -c1-7)
-            git config --global user.email "dj_lima@live.com"
-            git config --global user.name "Diego Lima"
-            git tag $TAG
-            git push https://djdelima:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/djdelima/spelling-checker.git $TAG
+        run: |
+          TAG=$(echo ${GITHUB_SHA} | cut -c1-7)
+          git config --global user.email "dj_lima@live.com"
+          git config --global user.name "Diego Lima"
+          git tag $TAG
+          git push https://djdelima:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/djdelima/spelling-checker.git $TAG
       - name: Build and push Docker image
         run: |
           docker build -t registry.heroku.com/spelling-checker/web:$TAG .
