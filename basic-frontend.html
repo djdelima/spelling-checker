@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spelling Checker</title>
+</head>
+<body>
+<form>
+    <textarea id="text-input"></textarea>
+    <br>
+    <button onclick="checkSpelling()">Check Spelling</button>
+</form>
+<br>
+<div id="result"></div>
+<script>
+    function checkSpelling() {
+        const text = document.getElementById("text-input").value;
+        fetch("http://localhost:3000/spell-check", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text: text }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `<p>ID: ${data.id}</p>
+                                    <p>Words: ${data.info.words}</p>
+                                    <p>Time: ${data.info.time}</p>`;
+                data.issues.forEach((issue) => {
+                    resultDiv.innerHTML += `<p>Type: ${issue.type}</p>
+                                      <p>Surface: ${issue.match.surface}</p>
+                                      <p>Replacement: ${issue.match.replacement}</p>`;
+                });
+            });
+    }
+</script>
+</body>
+</html>
