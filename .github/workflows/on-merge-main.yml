@@ -42,7 +42,6 @@ jobs:
     needs:
       - heroku-container-push
     steps:
-      - name: Login to Heroku Container Registry
-        run: echo ${{ secrets.HEROKU_API_KEY }} | heroku container:login
-      - name: Release to Heroku
-        run: heroku container:release web -a spelling-checker -t latest
+      run: |
+        docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
+        docker release registry.heroku.com/spelling-checker/web:latest
