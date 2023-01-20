@@ -35,6 +35,8 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build -t spelling-checker:latest .
+      - name: Log in to Heroku
+        run: heroku container:login
       - name: Push to Heroku
         run: heroku container:push web -a spelling-checker
       - name: Deploy to Heroku
