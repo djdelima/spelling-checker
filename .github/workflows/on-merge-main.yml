@@ -31,11 +31,13 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build -t spelling-checker:latest .
-          echo ${{ secrets.HEROKU_API_KEY }} | heroku container:login
-          heroku container:push web -a spelling-checker:latest
+          docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
+          docker push registry.heroku.com/spelling-checker:latest/web
 
   release:
     runs-on: ubuntu-latest
+    needs:
+      - build-and-test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
