@@ -34,8 +34,10 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build -t spelling-checker:latest .
-          echo ${{ secrets.HEROKU_API_KEY }} | heroku container:login
-          heroku container:push web -a spelling-checker -t latest
+      - name: Log in to Heroku
+        run: heroku container:login --api-key ${{ secrets.HEROKU_API_KEY }}
+      - name: Deploy to Heroku
+        run: heroku container:release web -a spelling-checker -t latest
 
   release:
     runs-on: ubuntu-latest
