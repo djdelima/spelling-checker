@@ -35,7 +35,7 @@ jobs:
         run: |
           docker build -t spelling-checker:latest .
       - name: Log in to Heroku
-        run: heroku auth:login --api-key ${{ secrets.HEROKU_API_KEY }}
+        run: heroku auth:token --api-key ${{ secrets.HEROKU_API_KEY }}
       - name: Deploy to Heroku
         run: heroku container:release web -a spelling-checker -t latest
 
