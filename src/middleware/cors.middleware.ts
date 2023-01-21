@@ -8,14 +8,8 @@ export class CorsMiddleware implements NestMiddleware {
       'Access-Control-Allow-Origin',
       'https://spelling-checker-front.herokuapp.com',
     );
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
-    );
-    res.header(
-      'Access-Control-Allow-Methods',
-      'GET,HEAD,PUT,PATCH,POST,DELETE',
-    );
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Allow-Methods', '*');
     next();
   }
 }
