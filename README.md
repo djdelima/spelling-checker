@@ -1,73 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Spelling Checker Front
+This is the frontend application for the Spelling Checker project. It allows users to input text and check for spelling and grammar errors. The errors are returned in a structured format, making it easy for users to understand and correct them.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Getting Started
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Description
+### Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js
+- npm
 
-## Installation
+### Installing
+
+Clone the repository and install the dependencies:
 
 ```bash
+# Repository
+$ git clone https://github.com/djdelima/spelling-checker-front.git
+
+# project
+$ cd spelling-checker-front
+
+# Install
 $ npm install
 ```
 
-## Running the app
+### Running the application
+
+Start the development server:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ npm start
 ```
 
-## Test
+The application will be running on http://localhost:3000
+
+### Building for production
+To build the application for production, run the following command:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ npm run build
 ```
 
-## Support
+This will create a production-ready build of the application in the build folder.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Deployment
+The application is set up for deployment to Heroku. To deploy, you will need to set up a Heroku account, create a new app, and connect it to the GitHub repository. Once connected, Heroku will automatically build and deploy the application when changes are pushed to the main branch.
 
-## Stay in touch
+### Built With
+- [React](https://reactjs.org/) - The web framework used 
+- Docker - Containerization
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Authors
 
-## License
+- **Diego Jose de Lima** - [djdelima](https://github.com/djdelima)
 
-Nest is [MIT licensed](LICENSE).
+### License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+### Acknowledgments
+- [GrammarBot](https://www.grammarbot.io/) - The spelling and grammar checker external API used in this project.
