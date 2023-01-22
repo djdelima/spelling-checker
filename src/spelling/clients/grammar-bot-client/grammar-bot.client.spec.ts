@@ -1,6 +1,7 @@
 import nock from 'nock';
 import { GrammarBotClient } from './grammar-bot.client';
 import { GrammarBotResponse } from './types';
+import { LoggerService } from '../../../logger.service';
 
 const mockGrammarBotResponse: GrammarBotResponse = {
   software: {
@@ -51,10 +52,12 @@ const mockGrammarBotResponse: GrammarBotResponse = {
 
 describe('GrammarBotClient', () => {
   let client: GrammarBotClient;
+  let logger: LoggerService;
 
   beforeEach(() => {
     process.env.API_KEY = 'test';
-    client = new GrammarBotClient();
+    logger = new LoggerService();
+    client = new GrammarBotClient(logger);
   });
 
   afterEach(() => {
