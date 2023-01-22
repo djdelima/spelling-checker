@@ -3,7 +3,10 @@ A spelling-checker REST API that uses the GrammarBOT API to check the spelling o
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+- These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+- Feel free to navigate through all tabs on GitHub repository (there is even an open pr), 
+- Actions tab (github actions) to understand build/test, docker build,push and release (deployment)
 
 ### Stack
 
