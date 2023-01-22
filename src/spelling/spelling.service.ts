@@ -19,6 +19,8 @@ export class SpellingService {
       response.body,
     ) as GrammarBotResponse;
 
+    console.log('grammarBotResponse: ' + grammarBotResponse);
+
     const issues: Array<Issue> = grammarBotResponse.matches.map(
       (issue: Match) => {
         return {
@@ -44,6 +46,7 @@ export class SpellingService {
       issues,
     };
 
+    console.log('spellValidation: ' + spellValidation);
     return spellValidation;
   }
 }
