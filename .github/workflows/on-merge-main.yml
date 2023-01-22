@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build the image
-        run: docker build -e API_KEY=${{ secrets.API_KEY }} -t spelling-checker:latest .
+        run: docker build --build-arg API_KEY=*** -t spelling-checker:latest .
       - name: Log in to Heroku
         run: heroku container:login
       - name: Push to Heroku
