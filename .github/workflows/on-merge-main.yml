@@ -32,9 +32,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build and push Docker image
+      - name: Build the image
         run: |
-          docker build -t spelling-checker:latest .
+          docker build -t spelling-checker:latest --build-arg API_KEY=${{ secrets.API_KEY }} .
       - name: Log in to Heroku
         run: heroku container:login
       - name: Push to Heroku
