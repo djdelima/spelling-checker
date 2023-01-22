@@ -43,6 +43,14 @@ Start the development server:
 $ npm run start
 ```
 
+### Running tests
+
+To run the tests, use the following command:
+
+```bash
+$ npm test
+```
+
 ### API usage
 
 #### Check Spelling
@@ -54,7 +62,7 @@ Method: POST
 
 ```json
 {
-	"text": "example text"
+	"text": "Susan go to the market."
 }
 ```
 
@@ -62,7 +70,22 @@ Method: POST
 
 ```json
 {
-	"text": "example text"
+  id: string; // Unique identifier for the check
+  info: {
+    words: number;
+    time: string; // Time at check start
+  }
+  issues: [ // Array of issues
+    {
+      type: string; // eg: spelling
+      match: {
+        surface: string; // The word with incorrect spelling
+        beginOffset: number; // Start index of the issue in content
+        endOffset: number; // End index of the issue in content
+        replacement: string[]; // Replacement words to correct the issue
+  }
+  }
+  ]
 }
 ```
 
