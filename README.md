@@ -66,6 +66,10 @@ Method: POST
 }
 ```
 
+### Live Demo - REST API Backend
+
+https://spelling-checker.herokuapp.com/
+
 ### Building for production
 To build the application for production, run the following command:
 
