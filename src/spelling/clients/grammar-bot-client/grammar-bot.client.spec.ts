@@ -70,12 +70,11 @@ describe('GrammarBotClient', () => {
       .post('/check')
       .reply(200, mockGrammarBotResponse);
 
-    const response = await client.checkGrammar('This is a test');
+    const response = (await client.checkGrammar(
+      'This is a test',
+    )) as GrammarBotResponse;
 
-    expect(response.statusCode).toBe(200);
-    expect(<GrammarBotResponse>JSON.parse(response.body)).toEqual(
-      mockGrammarBotResponse,
-    );
+    expect(response).toEqual(mockGrammarBotResponse);
   });
 
   it('should throw an error when the API returns a non-200 status code', async () => {
