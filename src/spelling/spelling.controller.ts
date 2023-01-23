@@ -15,7 +15,6 @@ export class SpellingController {
   @Post()
   @HttpCode(HttpStatus.OK)
   async getSuggestions(@Body('text') text: string) {
-    console.log(text);
     return this.spellingService.checkSpelling(text);
   }
 }
