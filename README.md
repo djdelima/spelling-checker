@@ -73,23 +73,33 @@ Method: POST
 
 ```json
 {
-  id: string; // Unique identifier for the check
-  info: {
-    words: number;
-    time: string; // Time at check start
-  }
-  issues: [ // Array of issues
+  "id": "abcdefg",
+  "info": {
+    "words": 100,
+    "time": "2022-01-01T12:00:00.000Z"
+  },
+  "issues": [
     {
-      type: string; // eg: spelling
-      match: {
-        surface: string; // The word with incorrect spelling
-        beginOffset: number; // Start index of the issue in content
-        endOffset: number; // End index of the issue in content
-        replacement: string[]; // Replacement words to correct the issue
-  }
-  }
+      "type": "spelling",
+      "match": {
+        "surface": "teh",
+        "beginOffset": 10,
+        "endOffset": 13,
+        "replacement": ["the"]
+      }
+    },
+    {
+      "type": "grammar",
+      "match": {
+        "surface": "I was went",
+        "beginOffset": 0,
+        "endOffset": 10,
+        "replacement": ["I went"]
+      }
+    }
   ]
 }
+
 ```
 
 ### Live Demo - REST API Backend
@@ -127,7 +137,10 @@ The API communicates with the GrammarBOT API to check the spelling of words and 
 
 ## TODO
 
-- Validations/Error Handling
+Please, go to the pull request tab on GitHub and check out two PR that I opened:
+- [add logging](https://github.com/djdelima/spelling-checker/pull/1)
+- [add error handling](https://github.com/djdelima/spelling-checker/pull/2)
+
 - Swagger
 - HMAC or API-KEY protection
 - PR opened to add logging
