@@ -83,4 +83,15 @@ describe('GrammarBotClient', () => {
       'Error checking grammar:',
     );
   });
+
+  it('should log an error if the API returns a non-200 status code', async () => {
+    nock('https://grammarbot.p.rapidapi.com').post('/check').reply(500, {});
+
+    const spy = jest.spyOn(logger, 'error').mockImplementation();
+    try {
+      await client.checkGrammar('This is a test');
+    } catch (error) {
+      expect(spy).toHaveBeenCalledWith(`${(error as Error).message}`);
+    }
+  });
 });

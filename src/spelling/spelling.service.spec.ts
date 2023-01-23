@@ -1,16 +1,19 @@
 import { SpellingService } from './spelling.service';
+import { LoggerService } from '../logger.service';
 import { IGrammarBotClient } from './clients/grammar-bot-client';
 import { any } from 'jest-mock-extended';
 
 describe('SpellingService', () => {
   let spellingService: SpellingService;
   let grammarBotClient: IGrammarBotClient;
+  let loggerService: LoggerService;
 
   beforeEach(() => {
     grammarBotClient = {
       checkGrammar: jest.fn(),
     } as any;
-    spellingService = new SpellingService(grammarBotClient);
+    loggerService = new LoggerService();
+    spellingService = new SpellingService(grammarBotClient, loggerService);
   });
 
   describe('checkSpelling', () => {
@@ -102,7 +105,7 @@ describe('SpellingService', () => {
       };
       (grammarBotClient.checkGrammar as jest.Mock).mockResolvedValue(response);
 
-      const service = new SpellingService(grammarBotClient);
+      const service = new SpellingService(grammarBotClient, loggerService);
       const result = await service.checkSpelling(text);
 
       expect(result).toEqual({
@@ -117,7 +120,7 @@ describe('SpellingService', () => {
         throw new Error('An error occurred');
       });
 
-      const service = new SpellingService(grammarBotClient);
+      const service = new SpellingService(grammarBotClient, loggerService);
       await expect(service.checkSpelling('This is a test')).rejects.toThrow(
         'An error occurred',
       );

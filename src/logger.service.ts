@@ -8,12 +8,16 @@ export class LoggerService {
   constructor() {
     this.logger = winston.createLogger({
       level: 'info',
-      format: winston.format.json(),
-      defaultMeta: { service: 'spelling-checker' },
-      transports: [
-        new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'combined.log' }),
-      ],
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.timestamp(),
+        winston.format.align(),
+        winston.format.printf(
+          (info) =>
+            `[${info.level.toUpperCase()}] ${info.timestamp} ${info.message}`,
+        ),
+      ),
+      transports: [new winston.transports.Console()],
     });
   }
 
