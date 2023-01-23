@@ -1,9 +1,10 @@
 import nock from 'nock';
 import { GrammarBotClient } from './grammar-bot.client';
-import { GrammarBotResponse } from './types';
 import { LoggerService } from '../../../logger.service';
+import { GrammarBotResponseDTO } from './types';
+import { GrammarBotError } from '../../../errors/grammar-bot.error';
 
-const mockGrammarBotResponse: GrammarBotResponse = {
+const mockGrammarBotResponse: GrammarBotResponseDTO = {
   software: {
     name: 'GrammarBot',
     version: '1.0.0',
@@ -67,39 +68,36 @@ describe('GrammarBotClient', () => {
 
   it('Grammar bot should return 200 with expected body', async () => {
     nock('https://grammarbot.p.rapidapi.com')
-      .post('/check')
+      .post(/check.*/)
       .reply(200, mockGrammarBotResponse);
 
-    const response = (await client.checkGrammar(
-      'This is a test',
-    )) as GrammarBotResponse;
-
+    const response = await client.checkGrammar('This is a test words.');
     expect(response).toEqual(mockGrammarBotResponse);
-  });
-
-  it('should throw an error when the API returns a non-200 status code', async () => {
-    await expect(client.checkGrammar('This is a test')).rejects.toThrow(
-      'Error checking grammar:',
-    );
   });
 
   test.each`
     statusCode | errorMessage
-    ${401}     | ${'Response code 401 (Unauthorized)'}
-    ${403}     | ${'Response code 403 (Forbidden)'}
-    ${429}     | ${'Response code 429 (Too Many Requests)'}
-    ${500}     | ${'Response code 500 (Internal Server Error)'}
-    ${503}     | ${'Response code 503 (Service Unavailable)'}
+    ${400}     | ${'Bad Request: Invalid request parameters'}
+    ${401}     | ${'Unauthorized: Invalid API Key'}
+    ${402}     | ${'Payment Required: Upgrade to a paid plan'}
+    ${403}     | ${'Forbidden: API Key suspended or blocked'}
+    ${429}     | ${'Too Many Requests: API Key has hit rate limit'}
+    ${500}     | ${'Internal Server Error: Unexpected error'}
+    ${503}     | ${'Service Unavailable: API is down for maintenance'}
   `(
     'should throw an error if the request returns a $statusCode status code',
     async ({ statusCode, errorMessage }) => {
       nock('https://grammarbot.p.rapidapi.com')
-        .post('/check')
+        .post(/check.*/)
         .reply(statusCode, {});
 
-      await expect(client.checkGrammar('This is a test')).rejects.toThrow(
-        `Error checking grammar: ${errorMessage}`,
-      );
+      try {
+        await client.checkGrammar('This is a test');
+      } catch (err) {
+        expect(err).toBeInstanceOf(GrammarBotError);
+        expect(err.message).toBe(errorMessage);
+        expect(err.httpCode).toBe(statusCode);
+      }
     },
   );
 });

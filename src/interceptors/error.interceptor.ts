@@ -12,9 +12,9 @@ export class GlobalErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, call$: CallHandler): Observable<any> {
     return call$.handle().pipe(
       catchError((error: Error) => {
-        // handle the error based on its httpCode property
+        // handle the error based on Error instance
         if (error instanceof GrammarBotError) {
-          throw new HttpException(JSON.stringify(error), error.httpCode);
+          throw new HttpException(error.message, error.httpCode);
         }
         return throwError(error);
       }),
