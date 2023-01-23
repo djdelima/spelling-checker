@@ -137,13 +137,13 @@ The API communicates with the GrammarBOT API to check the spelling of words and 
 
 ## TODO
 
-Please, go to the pull request tab on GitHub and check out two PR that I opened:
+The blue ones will redirect you direct to the PR, others will be updated when PR for each feature is opened
+
 - [add logging](https://github.com/djdelima/spelling-checker/pull/1)
 - [add error handling](https://github.com/djdelima/spelling-checker/pull/2)
 
 - Swagger
 - HMAC or API-KEY protection
-- PR opened to add logging
 - Docs
 - Code refactoring
 - Envs (dev, stage, prd)
