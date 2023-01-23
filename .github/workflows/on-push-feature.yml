@@ -6,14 +6,14 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 14
-      - name: Set API_KEY
-        run: echo "::set-env name=API_KEY::${{ secrets.API_KEY }}"
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -21,15 +21,20 @@ jobs:
       - name: Test
         run: npm test
 
-  docker-build-and-push:
+  heroku-container-push:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - build-and-test
     env:
       API_KEY: ${{ secrets.API_KEY }}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build and push Docker image
-        run: |
-          docker build -t spelling-checker:latest .
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push spelling-checker:latest
+      - name: Build the image
+        run: docker build --build-arg API_KEY=${{ secrets.API_KEY }} -t spelling-checker .
+      - name: Log in to Heroku
+        run: heroku container:login
+      - name: Push to Heroku
+        run: heroku container:push web -a spelling-checker
