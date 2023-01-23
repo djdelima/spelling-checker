@@ -5,6 +5,8 @@ import { envConfig } from '../../../env.config';
 import { Inject, Injectable } from '@nestjs/common';
 import { LoggerService } from '../../../logger.service';
 import { statusCodeErrors } from '../../spelling.types';
+import { GrammarBotError } from '../../../errors/grammar-bot.error';
+import { GrammarBotResponse } from '~/spelling/clients';
 
 @Injectable()
 export class GrammarBotClient implements IGrammarBotClient {
@@ -13,7 +15,7 @@ export class GrammarBotClient implements IGrammarBotClient {
   async checkGrammar(
     text: string,
     language = 'en-US',
-  ): Promise<Response<string>> {
+  ): Promise<GrammarBotResponse> {
     try {
       this.logger.debug(`Checking grammar for text: ${text}`);
       const encodedParams = new URLSearchParams();
@@ -34,17 +36,18 @@ export class GrammarBotClient implements IGrammarBotClient {
       this.logger.debug(
         `Sending request to GrammarBot API with options: ${options}`,
       );
-      const response = (await got(options)) as Response<string>;
+      const response = (await got(options)) as Response;
 
       if (response.statusCode >= 400) {
         const errorMessage =
           statusCodeErrors[response.statusCode] ||
           `Error checking grammar: Unexpected error with status code ${response.statusCode}`;
-        throw new Error(errorMessage);
+        this.logger.error(`Error checking grammar: ${errorMessage}`);
+        throw new GrammarBotError(response.statusCode, errorMessage);
       }
 
       this.logger.debug(`Received response from GrammarBot API: ${response}`);
-      return response;
+      return JSON.parse(<string>response.body) as GrammarBotResponse;
     } catch (error) {
       this.logger.error(`Error checking grammar: ${(error as Error).message}`);
       throw new Error(`Error checking grammar: ${(error as Error).message}`);

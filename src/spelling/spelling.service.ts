@@ -17,11 +17,7 @@ export class SpellingService {
 
   async checkSpelling(text: string): Promise<SpellValidation> {
     this.logger.debug(`Checking spelling for text: ${text}`);
-    const response = await this.grammarBotClient.checkGrammar(text);
-
-    const grammarBotResponse: GrammarBotResponse = JSON.parse(
-      response.body,
-    ) as GrammarBotResponse;
+    const grammarBotResponse = await this.grammarBotClient.checkGrammar(text);
 
     this.logger.debug(
       `GrammarBot response: ${JSON.stringify(grammarBotResponse)}`,
