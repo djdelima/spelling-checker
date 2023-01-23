@@ -3,7 +3,10 @@ A spelling-checker REST API that uses the GrammarBOT API to check the spelling o
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+- These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+- Feel free to navigate through all tabs on GitHub repository (there is even an open pr), 
+- Actions tab (github actions) to understand build/test, docker build,push and release (deployment)
 
 ### Stack
 
@@ -120,6 +123,21 @@ The spelling-checker API is built on NestJS and makes use of the following NestJ
 - Platform-express
     
 The API communicates with the GrammarBOT API to check the spelling of words and returns the result in a JSON format to the user.
+
+
+## TODO
+
+- Validations/Error Handling
+- Swagger
+- HMAC or API-KEY protection
+- PR opened to add logging
+- Docs
+- Code refactoring
+- Envs (dev, stage, prd)
+- Monitoring
+- Business Metrics
+- Alerts
+- IaC (terraform) if moving from Heroku to AWS
 
 ### Authors
 
