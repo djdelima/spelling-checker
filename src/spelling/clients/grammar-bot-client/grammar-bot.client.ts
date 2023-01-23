@@ -33,14 +33,6 @@ export class GrammarBotClient implements IGrammarBotClient {
         },
       );
 
-      if (response.statusCode >= 400) {
-        const errorMessage =
-          statusCodeErrors[response.statusCode] ||
-          `Error checking grammar: Unexpected error with status code ${response.statusCode}`;
-        this.logger.error(`Error checking grammar: ${errorMessage}`);
-        throw new GrammarBotError(response.statusCode, errorMessage);
-      }
-
       this.logger.debug(`Received response from GrammarBot API: ${response}`);
       return plainToClass(GrammarBotResponseDTO, JSON.parse(response.body));
     } catch (error) {
