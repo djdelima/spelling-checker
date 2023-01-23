@@ -128,6 +128,7 @@ The API communicates with the GrammarBOT API to check the spelling of words and 
 ## TODO
 
 - Validations/Error Handling
+- Swagger
 - HMAC or API-KEY protection
 - PR opened to add logging
 - Docs
