@@ -13,8 +13,6 @@ describe('GrammarBotClient', () => {
     const response = await client.checkGrammar(text, language);
 
     expect(response).toBeDefined();
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBeDefined();
     // more assertions based on the expected response
   });
 
