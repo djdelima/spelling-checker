@@ -71,7 +71,7 @@ describe('SpellingService', () => {
       expect(result.issues[0].type).toBe('Possible Typo');
       expect(result.issues[0].match.surface).toBe('This is a tst.');
       expect(result.info.words).toBe(4);
-      expect(result.id).toBe(any());
+      expect(result.id).toBeTruthy();
     });
 
     it('should return an empty array of issues if the response body is empty', async () => {

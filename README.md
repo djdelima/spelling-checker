@@ -124,6 +124,20 @@ The spelling-checker API is built on NestJS and makes use of the following NestJ
     
 The API communicates with the GrammarBOT API to check the spelling of words and returns the result in a JSON format to the user.
 
+
+## TODO
+
+- Validations/Error Handling
+- HMAC or API-KEY protection
+- PR opened to add logging
+- Docs
+- Code refactoring
+- Envs (dev, stage, prd)
+- Monitoring
+- Business Metrics
+- Alerts
+- IaC (terraform) if moving from Heroku to AWS
+
 ### Authors
 
 - **Diego Jose de Lima** - [djdelima](https://github.com/djdelima)
