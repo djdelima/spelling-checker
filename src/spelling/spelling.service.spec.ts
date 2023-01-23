@@ -1,5 +1,6 @@
 import { SpellingService } from './spelling.service';
 import { IGrammarBotClient } from './clients/grammar-bot-client';
+import { any } from 'jest-mock-extended';
 
 describe('SpellingService', () => {
   let spellingService: SpellingService;
@@ -70,7 +71,7 @@ describe('SpellingService', () => {
       expect(result.issues[0].type).toBe('Possible Typo');
       expect(result.issues[0].match.surface).toBe('This is a tst.');
       expect(result.info.words).toBe(4);
-      expect(result.id).toBe('unique-identifier');
+      expect(result.id).toBe(any());
     });
 
     it('should return an empty array of issues if the response body is empty', async () => {
@@ -105,7 +106,7 @@ describe('SpellingService', () => {
       const result = await service.checkSpelling(text);
 
       expect(result).toEqual({
-        id: 'unique-identifier',
+        id: any(),
         info: { words: text.split(' ').length, time: expect.any(String) },
         issues: [],
       });

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import {
   GrammarBotResponse,
   IGrammarBotClient,
@@ -14,13 +15,11 @@ export class SpellingService {
 
   async checkSpelling(text: string): Promise<SpellValidation> {
     const response = await this.grammarBotClient.checkGrammar(text);
-
     const grammarBotResponse: GrammarBotResponse = JSON.parse(
       response.body,
     ) as GrammarBotResponse;
 
-    console.log('grammarBotResponse: ' + grammarBotResponse);
-
+    // Extract issues from grammarBotResponse
     const issues: Array<Issue> = grammarBotResponse.matches.map(
       (issue: Match) => {
         return {
@@ -37,16 +36,20 @@ export class SpellingService {
       },
     );
 
-    const spellValidation: SpellValidation = {
-      id: 'unique-identifier',
+    // Extract words count and time
+    const wordsCount = text.split(' ').length;
+    const time = new Date().toString();
+
+    // create spellValidation
+    const spellValidation = {
+      id: uuidv4(),
       info: {
-        words: text.split(' ').length,
-        time: new Date().toString(),
+        words: wordsCount,
+        time: time,
       },
       issues,
     };
 
-    console.log('spellValidation: ' + spellValidation);
     return spellValidation;
   }
 }
