@@ -4,6 +4,7 @@ import { IGrammarBotClient } from './interfaces';
 import { envConfig } from '../../../env.config';
 import { Inject, Injectable } from '@nestjs/common';
 import { LoggerService } from '../../../logger.service';
+import { statusCodeErrors } from '../../spelling.types';
 
 @Injectable()
 export class GrammarBotClient implements IGrammarBotClient {
@@ -34,6 +35,13 @@ export class GrammarBotClient implements IGrammarBotClient {
         `Sending request to GrammarBot API with options: ${options}`,
       );
       const response = (await got(options)) as Response<string>;
+
+      if (response.statusCode >= 400) {
+        const errorMessage =
+          statusCodeErrors[response.statusCode] ||
+          `Error checking grammar: Unexpected error with status code ${response.statusCode}`;
+        throw new Error(errorMessage);
+      }
 
       this.logger.debug(`Received response from GrammarBot API: ${response}`);
       return response;

@@ -84,14 +84,23 @@ describe('GrammarBotClient', () => {
     );
   });
 
-  it('should log an error if the API returns a non-200 status code', async () => {
-    nock('https://grammarbot.p.rapidapi.com').post('/check').reply(500, {});
+  test.each`
+    statusCode | errorMessage
+    ${401}     | ${'Response code 401 (Unauthorized)'}
+    ${403}     | ${'Response code 403 (Forbidden)'}
+    ${429}     | ${'Response code 429 (Too Many Requests)'}
+    ${500}     | ${'Response code 500 (Internal Server Error)'}
+    ${503}     | ${'Response code 503 (Service Unavailable)'}
+  `(
+    'should throw an error if the request returns a $statusCode status code',
+    async ({ statusCode, errorMessage }) => {
+      nock('https://grammarbot.p.rapidapi.com')
+        .post('/check')
+        .reply(statusCode, {});
 
-    const spy = jest.spyOn(logger, 'error').mockImplementation();
-    try {
-      await client.checkGrammar('This is a test');
-    } catch (error) {
-      expect(spy).toHaveBeenCalledWith(`${(error as Error).message}`);
-    }
-  });
+      await expect(client.checkGrammar('This is a test')).rejects.toThrow(
+        `Error checking grammar: ${errorMessage}`,
+      );
+    },
+  );
 });
