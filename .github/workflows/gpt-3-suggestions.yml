@@ -16,7 +16,7 @@ jobs:
           node-version: 14
 
       - name: Run script
-        run: bash ${{GITHUB_WORKSPACE}}/.github/workflows/openapi-code-suggestions.sh $API_KEY
+        run: bash ${GITHUB_WORKSPACE}/.github/workflows/openapi-code-suggestions.sh $API_KEY
 
       - name: Add suggestions as a comment on the pull request
         uses: peter-evans/create-or-update-comment@v2
