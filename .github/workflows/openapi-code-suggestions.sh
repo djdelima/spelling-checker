@@ -3,17 +3,13 @@
 # Set API key
 API_KEY="$1"
 
-# Get prompt from pull request
-PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+# Get code snippets from pull request
+PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH" | grep -oP '```\n(.*?)\n```' | sed 's/```//g')
 
-echo "ae $GITHUB_TOKEN"
-echo "bc $API_KEY"
-echo "de $GITHUB_REPOSITORY"
-echo "fe $PULL_REQUEST_NUMBER"
+echo "Prompt: $PROMPT"
+
 # Use OpenAI API to generate code suggestions
-# Use OpenAI API to generate code suggestions
-echo -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\",\"temperature\":0.5}" https://api.openai.com/v1/engines/davinci/completions
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\",\"temperature\":0.5}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
 echo "Suggestions: $(cat suggestions.txt)"
 
 # Add suggestions as a comment on the pull request
