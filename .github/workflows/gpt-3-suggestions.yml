@@ -13,18 +13,13 @@ jobs:
         with:
           node-version: 14
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate code and make suggestions using GPT-3
+      - name: Set up API key
         env:
           API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          npx openai code-generator \
-            --api-key=$API_KEY \
-            --prompt="Code suggestions for ${{ github.event.pull_request.base.repo.name }}" \
-            --language=javascript \
-            --output=suggestions.txt
+
+      - name: Run script
+        run: bash openai-code-suggestions.sh $API_KEY
+
 
       - name: Add suggestions as a comment on the pull request
         uses: peter-evans/create-or-update-comment@v2
