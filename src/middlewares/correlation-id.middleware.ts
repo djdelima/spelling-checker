@@ -14,7 +14,6 @@ export class CorrelationIdMiddleware implements NestMiddleware {
     this.clsService.set(CORRELATION_ID_CLS_KEY, xcid);
 
     res.setHeader('x-correlation-id', xcid);
-    console.log(xcid);
     next();
   }
 }
