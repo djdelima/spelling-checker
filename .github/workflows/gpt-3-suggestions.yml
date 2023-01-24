@@ -27,6 +27,6 @@ jobs:
             --output=suggestions.txt
 
       - name: Add suggestions as a comment on the pull request
-        uses: peter-evans/create-or-update-pull-request-comment@v3
+        uses: peter-evans/create-or-update-comment@v2
         with:
           body: suggestions.txt
