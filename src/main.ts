@@ -3,7 +3,7 @@ dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { CorsMiddleware } from './middleware/cors.middleware';
+import { CorsMiddleware } from './middlewares/cors.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
