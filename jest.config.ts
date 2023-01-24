@@ -11,6 +11,9 @@ export default {
     '!**/node_modules/**',
     '!**/vendor/**',
     '!<rootDir>/**/**/*.integration.test.ts',
+    '!<rootDir>/**/**/index.ts',
+    '!<rootDir>/**/**/*.module.ts',
+    '!<rootDir>/**/**/main.ts',
   ],
   coverageReporters: [['lcov', { projectRoot: './' }], 'text'],
   coverageThreshold: {
