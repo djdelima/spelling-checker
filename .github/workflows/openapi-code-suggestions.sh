@@ -7,7 +7,6 @@ API_KEY="$1"
 PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
 
 echo "$API_KEY"
-echo "$PROMPT"
 echo "$GITHUB_EVENT_PATH"
 echo "$GITHUB_TOKEN"
 echo "$GITHUB_REPOSITORY"
