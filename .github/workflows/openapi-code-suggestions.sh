@@ -6,11 +6,10 @@ API_KEY="$1"
 # Get prompt from pull request
 PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
 
-echo "$API_KEY"
-echo "$GITHUB_EVENT_PATH"
-echo "$GITHUB_TOKEN"
-echo "$GITHUB_REPOSITORY"
-echo "$PULL_REQUEST_NUMBER"
+echo "ae $GITHUB_TOKEN"
+echo "bc $API_KEY"
+echo "de $GITHUB_REPOSITORY"
+echo "fe $PULL_REQUEST_NUMBER"
 # Use OpenAI API to generate code suggestions
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"python\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
 
