@@ -1,0 +1,32 @@
+name: GPT-3 Suggestions
+on: [pull_request]
+
+jobs:
+  gpt3-suggestions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate code and make suggestions using GPT-3
+        env:
+          API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          npx openai code-generator \
+            --api-key=$API_KEY \
+            --prompt="Code suggestions for ${{ github.event.pull_request.base.repo.name }}" \
+            --language=javascript \
+            --output=suggestions.txt
+
+      - name: Add suggestions as a comment on the pull request
+        uses: peter-evans/create-or-update-pull-request-comment@v3
+        with:
+          body: suggestions.txt
