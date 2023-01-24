@@ -11,7 +11,8 @@ echo "bc $API_KEY"
 echo "de $GITHUB_REPOSITORY"
 echo "fe $PULL_REQUEST_NUMBER"
 # Use OpenAI API to generate code suggestions
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
+# Use OpenAI API to generate code suggestions
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\",\"temperature\":0.5}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
 echo "Suggestions: $(cat suggestions.txt)"
 
 # Add suggestions as a comment on the pull request
