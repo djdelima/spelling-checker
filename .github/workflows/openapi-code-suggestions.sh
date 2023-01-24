@@ -6,13 +6,13 @@ API_KEY="$1"
 OWNER=djdelima
 REPO=spelling-checker
 PULL_REQUEST_NUMBER=1
-FILE_EXTENSIONS=".py"
+FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
-FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files" | jq -r '.[].filename')
+FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/files")
 
 # Loop through list of files and get contents of relevant files
-for FILE in $FILES
+for FILE in $(echo $FILES | jq -r '.[].filename');
 do
     # Check if file extension is in list of relevant extensions
     if [[ $FILE =~ $FILE_EXTENSIONS ]]
