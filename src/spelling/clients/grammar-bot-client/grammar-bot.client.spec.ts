@@ -1,6 +1,7 @@
 import nock from 'nock';
 import { GrammarBotClient } from './grammar-bot.client';
 import { GrammarBotResponse } from './types';
+import { LoggerService } from '../../../logger.service';
 
 const mockGrammarBotResponse: GrammarBotResponse = {
   software: {
@@ -51,10 +52,12 @@ const mockGrammarBotResponse: GrammarBotResponse = {
 
 describe('GrammarBotClient', () => {
   let client: GrammarBotClient;
+  let logger: LoggerService;
 
   beforeEach(() => {
     process.env.API_KEY = 'test';
-    client = new GrammarBotClient();
+    logger = new LoggerService();
+    client = new GrammarBotClient(logger);
   });
 
   afterEach(() => {
@@ -79,5 +82,16 @@ describe('GrammarBotClient', () => {
     await expect(client.checkGrammar('This is a test')).rejects.toThrow(
       'Error checking grammar:',
     );
+  });
+
+  it('should log an error if the API returns a non-200 status code', async () => {
+    nock('https://grammarbot.p.rapidapi.com').post('/check').reply(500, {});
+
+    const spy = jest.spyOn(logger, 'error').mockImplementation();
+    try {
+      await client.checkGrammar('This is a test');
+    } catch (error) {
+      expect(spy).toHaveBeenCalledWith(`${(error as Error).message}`);
+    }
   });
 });

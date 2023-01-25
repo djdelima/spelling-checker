@@ -5,6 +5,7 @@ import { INestApplication } from '@nestjs/common';
 import { GrammarBotClient } from '../src/spelling/clients/grammar-bot-client/grammar-bot.client';
 import { SpellingController } from '../src/spelling/spelling.controller';
 import { SpellingService } from '../src/spelling/spelling.service';
+import { LoggerService } from 'logger.service';
 
 describe('SpellingController', () => {
   let app: INestApplication;
@@ -14,6 +15,7 @@ describe('SpellingController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SpellingController],
       providers: [
+        LoggerService,
         SpellingService,
         {
           provide: 'IGrammarBotClient',
