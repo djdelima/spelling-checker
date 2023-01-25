@@ -1,6 +1,6 @@
 import CircuitBreaker, { Options } from 'opossum';
-import { GrammarBotError } from 'errors/grammar-bot.error';
 import { LoggerService } from 'logger.service';
+import { GrammarBotError } from '../errors/grammar-bot.error';
 
 export const createCircuitBreaker = (func: any, logger: LoggerService) => {
   const options: Options = {
@@ -12,7 +12,7 @@ export const createCircuitBreaker = (func: any, logger: LoggerService) => {
   };
   const breaker = new CircuitBreaker(func, options);
   breaker.on('timeout', () => {
-    logger.log('TIMEOUT: is taking too long to respond.`');
+    logger.log('TIMEOUT: is taking too long to respond.');
   });
   breaker.on('open', () => {
     logger.log('OPEN: The breaker just opened.');
@@ -21,7 +21,7 @@ export const createCircuitBreaker = (func: any, logger: LoggerService) => {
     logger.log('HALF_OPEN: The breaker is half open.');
   });
   breaker.on('close', () => {
-    logger.log('CLOSE: The breaker has closed. Service OK.`');
+    logger.log('CLOSE: The breaker has closed. Service OK.');
   });
   breaker.on('fallback', (err: any) => {
     logger.error(`Circuit breaker fallback: ${err.message}`);

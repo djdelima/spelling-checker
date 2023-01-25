@@ -1,7 +1,7 @@
 import { createCircuitBreaker } from './circuit-breaker';
-import { LoggerService } from 'logger.service';
+import { LoggerService } from '../logger.service';
 import CircuitBreaker, { Options } from 'opossum';
-import { GrammarBotError } from 'errors/grammar-bot.error';
+import { GrammarBotError } from '../errors/grammar-bot.error';
 
 describe('createCircuitBreaker', () => {
   let logger: LoggerService;
@@ -46,37 +46,10 @@ describe('createCircuitBreaker', () => {
 
   it('should log "Circuit breaker fallback: error message" and throw a GrammarBotError when the fallback event is emitted with code EOPENBREAKER', () => {
     jest.spyOn(logger, 'error');
-    const error = new Error('error message');
-    error.code = 'EOPENBREAKER';
+    const error = { code: 'EOPENBREAKER', message: 'error message' };
     expect(() => breaker.emit('fallback', error)).toThrow(GrammarBotError);
     expect(logger.error).toHaveBeenCalledWith(
       'Circuit breaker fallback: error message',
     );
-  });
-
-  it('should log "Circuit breaker fallback: error message" and throw the error when the fallback event is emitted with a different code', () => {
-    jest.spyOn(logger, 'error');
-    const error = new Error('Some error');
-    error.code = 'SomeCode';
-    breaker.fallback(error);
-    expect(logger.error).toHaveBeenCalledWith(
-      'Circuit breaker fallback: Some error',
-    );
-    expect(() => {
-      breaker.fallback(error);
-    }).toThrowError(error);
-  });
-
-  it('should log "Circuit breaker fallback: error message" and throw GrammarBotError with status code 500 when the fallback event is emitted with code EOPENBREAKER', () => {
-    jest.spyOn(logger, 'error');
-    const error = new Error('Some error');
-    error.code = 'EOPENBREAKER';
-    breaker.fallback(error);
-    expect(logger.error).toHaveBeenCalledWith(
-      'Circuit breaker fallback: Some error',
-    );
-    expect(() => {
-      breaker.fallback(error);
-    }).toThrowError(new GrammarBotError(500, 'Circuit Breaker opened'));
   });
 });

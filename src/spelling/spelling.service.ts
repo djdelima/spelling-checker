@@ -8,7 +8,7 @@ import {
 } from './clients/grammar-bot-client';
 import { Issue, SpellValidation } from './spelling.types';
 import { LoggerService } from '../logger.service';
-import CircuitBreaker, { Options } from 'opossum';
+import CircuitBreaker from 'opossum';
 import { createCircuitBreaker } from '../circuit-breaker/circuit-breaker';
 
 @Injectable()
@@ -16,12 +16,12 @@ export class SpellingService {
   private breaker: CircuitBreaker;
 
   constructor(
+    @Inject(LoggerService) readonly logger: LoggerService,
     @Inject('IGrammarBotClient') readonly grammarBotClient: IGrammarBotClient,
-    private readonly logger: LoggerService,
   ) {
     this.breaker = createCircuitBreaker(
       this.grammarBotClient.checkGrammar,
-      logger,
+      this.logger,
     );
   }
 
