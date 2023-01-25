@@ -1,5 +1,5 @@
-import { Response } from 'got';
+import { GrammarBotResponseDTO } from 'spelling/clients';
 
 export interface IGrammarBotClient {
-  checkGrammar(text: string, language?: string): Promise<Response<string>>;
+  checkGrammar(text: string, language?: string): Promise<GrammarBotResponseDTO>;
 }
