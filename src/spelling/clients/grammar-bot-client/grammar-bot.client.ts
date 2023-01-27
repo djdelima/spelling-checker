@@ -10,7 +10,7 @@ import { GrammarBotResponseDTO } from './types';
 
 @Injectable()
 export class GrammarBotClient implements IGrammarBotClient {
-  constructor(@Inject(LoggerService) private readonly logger: LoggerService) {}
+  constructor(@Inject(LoggerService) readonly logger: LoggerService) {}
 
   async checkGrammar(
     text: string,
