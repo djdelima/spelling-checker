@@ -11,17 +11,22 @@ import { LoggerService } from '../logger.service';
 import { ClsMiddleware } from '~/middlewares/cls.middleware';
 import { CorrelationIdMiddleware } from '~/middlewares/correlation-id.middleware';
 import { ClsService } from '~/cls.service';
+import { ConfigModule } from '@nestjs/config';
+import { GrammarBotClientConfig } from '~/spelling/clients/grammar-bot-client/configs';
+import { RequestService } from '~/request-service';
 
 @Module({
+  imports: [ConfigModule.forFeature(GrammarBotClientConfig.factory)],
   controllers: [SpellingController],
   providers: [
-    ClsService,
+    GrammarBotClientConfig,
+    { provide: 'IRequestService', useClass: RequestService },
     LoggerService,
     SpellingService,
     { provide: 'IGrammarBotClient', useClass: GrammarBotClient },
   ],
   exports: [
-    ClsService,
+    { provide: 'IRequestService', useClass: RequestService },
     LoggerService,
     SpellingService,
     { provide: 'IGrammarBotClient', useClass: GrammarBotClient },
