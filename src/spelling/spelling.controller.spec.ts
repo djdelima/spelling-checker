@@ -6,12 +6,6 @@ import { LoggerService } from '../logger.service';
 import { SpellValidation } from './spelling.types';
 import { HttpException } from '@nestjs/common';
 
-class MockGrammarBotClient implements IGrammarBotClient {
-  checkGrammar(): Promise<any> {
-    return Promise.resolve({});
-  }
-}
-
 describe('SpellingController', () => {
   let spellingController: SpellingController;
   let spellingService: SpellingService;
@@ -24,7 +18,11 @@ describe('SpellingController', () => {
         LoggerService,
         {
           provide: 'IGrammarBotClient',
-          useClass: MockGrammarBotClient,
+          useValue: {
+            callWithAuth: jest.fn(),
+            getGotInstanceWithAuth: jest.fn(),
+            checkGrammar: Promise.resolve({}),
+          },
         },
       ],
     }).compile();

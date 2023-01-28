@@ -32,4 +32,8 @@ export class LoggerService {
   debug(message: string) {
     this.logger.debug(message);
   }
+
+  getLogger(): LoggerWin {
+    return this.logger;
+  }
 }
