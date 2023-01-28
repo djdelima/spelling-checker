@@ -7,12 +7,11 @@ import { ClsService } from '~/cls.service';
 @Module({
   imports: [SpellingModule],
   providers: [
+    ClsService,
     {
       provide: APP_INTERCEPTOR,
       useClass: GlobalErrorInterceptor,
     },
-    ClsService,
   ],
-  exports: [ClsService],
 })
 export class AppModule {}

@@ -16,7 +16,7 @@ describe('SpellingService', () => {
       checkGrammar: jest.fn(),
     } as any;
     loggerService = new LoggerService();
-    spellingService = new SpellingService(grammarBotClient, loggerService);
+    spellingService = new SpellingService(grammarBotClient);
   });
 
   describe('checkSpelling', () => {
@@ -104,7 +104,7 @@ describe('SpellingService', () => {
       };
       (grammarBotClient.checkGrammar as jest.Mock).mockResolvedValue(response);
 
-      const service = new SpellingService(grammarBotClient, loggerService);
+      const service = new SpellingService(grammarBotClient);
       const result = await service.checkSpelling(text);
 
       expect(result).toEqual({
@@ -119,7 +119,7 @@ describe('SpellingService', () => {
         throw new Error('An error occurred');
       });
 
-      const service = new SpellingService(grammarBotClient, loggerService);
+      const service = new SpellingService(grammarBotClient);
       await expect(service.checkSpelling('This is a test')).rejects.toThrow(
         'An error occurred',
       );

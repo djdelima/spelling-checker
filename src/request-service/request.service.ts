@@ -4,12 +4,13 @@ import got, { ExtendOptions, Got } from 'got';
 import { LoggerService } from '~/logger.service';
 import { IRequestService } from '~/request-service/request.service.interface';
 import { Logger } from 'winston';
+import { Inject } from '@nestjs/common';
 
 export class RequestService implements IRequestService {
-  private httpAgent: HttpAgent;
-  private httpsAgent: HttpsAgent;
+  private readonly httpAgent: HttpAgent;
+  private readonly httpsAgent: HttpsAgent;
 
-  constructor(private readonly logger: LoggerService) {
+  constructor(@Inject(LoggerService) private readonly logger: LoggerService) {
     this.httpAgent = new HttpAgent({
       keepAlive: true,
       maxSockets: 50,

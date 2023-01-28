@@ -1,4 +1,4 @@
-import { AppError } from '~/errors/app-error';
+import { AppError } from '../errors/app-error';
 
 export class UnexpectedUpstreamResponseError extends AppError {
   constructor(upstream: string, statusCode: number, responseBody: any) {
