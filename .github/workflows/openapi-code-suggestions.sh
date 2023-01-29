@@ -24,8 +24,10 @@ do
         echo "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head";
         CONTENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head")
 
-        PROMPT="$PROMPT $(echo $CONTENTS | jq -r '.content')"
-#        PROMPT="$PROMPT $(echo $CONTENTS | jq -r '.content' | base64 --decode)"
+        DECODED_CONTENT="$PROMPT $(echo $CONTENTS | jq -r '.content' | base64 --decode)"
+
+        # escape the special characters
+        PROMPT=$(printf "%q" "$DECODED_CONTENT")
 
         echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions"
 
@@ -38,4 +40,3 @@ do
 
     fi
 done
-
