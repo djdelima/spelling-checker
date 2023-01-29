@@ -38,10 +38,10 @@ do
        escaped_payload=$(echo "$payload" | jq -c .)
 
 
-        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}""
+        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\""}""
 
         # Use OpenAI API to generate code suggestions
-        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" > suggestions.txt
+        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\""}" > suggestions.txt
         echo "Suggestions: $(cat suggestions.txt)"
 
         # Add suggestions as a comment on the pull request
