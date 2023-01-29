@@ -38,7 +38,7 @@ do
        escaped_payload=$(echo "$payload" | jq -c .)
 
         # Use OpenAI API to generate code suggestions
-        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d escaped_payload https://api.openai.com/v1/completions > suggestions.txt
+        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d payload https://api.openai.com/v1/completions > suggestions.txt
         echo "Suggestions: $(cat suggestions.txt)"
 
         # Add suggestions as a comment on the pull request
