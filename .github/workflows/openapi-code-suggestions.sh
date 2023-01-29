@@ -40,7 +40,12 @@ do
         echo "Suggestions: $(cat suggestions.txt)"
 
         # Add suggestions as a comment on the pull request
-        curl -H "Authorization: token $GITHUB_TOKEN" -X POST -d "{\"body\":\"$(cat suggestions.txt)\"}" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PULL_REQUEST_NUMBER/comments"
-
+        curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN"\
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/$OWNER/$REPO/issues/$PULL_REQUEST_NUMBER/comments \
+          -d '{\"body\":\"$(cat suggestions.txt)\"}'
     fi
 done
