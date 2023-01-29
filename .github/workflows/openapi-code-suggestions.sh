@@ -25,11 +25,11 @@ do
         CONTENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head")
 
         DECODED_CONTENT="$PROMPT $(echo $CONTENTS | jq -r '.content' | base64 --decode)"
+        echo "DECODED_CONTENT: $DECODED_CONTENT"
 
         # escape the special characters
         PROMPT=$(printf "%q" "$DECODED_CONTENT")
 
-        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions"
 
         # Use OpenAI API to generate code suggestions
         curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
