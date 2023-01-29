@@ -3,6 +3,7 @@
 # Set API key
 API_KEY="$1"
 GITHUB_TOKEN="$2"
+GITHUB_EVENT_PATH="$3"
 
 OWNER=djdelima
 REPO=spelling-checker
@@ -10,9 +11,7 @@ PULL_REQUEST_NUMBER=3
 FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
-echo "FILES: $GITHUB_TOKEN"
 FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files")
-echo "FILES: $FILES"
 
 # Loop through list of files and get contents of relevant files
 for FILE in $(echo $FILES | jq -r '.[].filename');
@@ -22,6 +21,8 @@ do
     then
         # Get contents of file
         CONTENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head")
+
+        echo "CONTENTS: CONTENTS"
 
         # Get code snippets from pull request
         PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH" | grep -oP '```\n(.*?)\n```' | sed 's/```//g')
