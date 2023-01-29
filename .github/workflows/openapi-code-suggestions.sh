@@ -37,11 +37,8 @@ do
        # Escape the special characters in the payload using jq
        escaped_payload=$(echo "$payload" | jq -c .)
 
-
-        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\""}""
-
         # Use OpenAI API to generate code suggestions
-        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\""}" > suggestions.txt
+        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\"}" > suggestions.txt
         echo "Suggestions: $(cat suggestions.txt)"
 
         # Add suggestions as a comment on the pull request
