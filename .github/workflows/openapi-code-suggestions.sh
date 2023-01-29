@@ -9,6 +9,7 @@ PULL_REQUEST_NUMBER=1
 FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
+echo "FILES: $GITHUB_TOKEN"
 FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files")
 echo "FILES: $FILES"
 
