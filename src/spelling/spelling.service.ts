@@ -1,27 +1,32 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  GrammarBotResponse,
+  GrammarBotResponseDTO,
   IGrammarBotClient,
-  Match,
+  MatchDTO,
 } from './clients/grammar-bot-client';
 import { Issue, SpellValidation } from './spelling.types';
+import { LoggerService } from '../logger.service';
 
 @Injectable()
 export class SpellingService {
   constructor(
     @Inject('IGrammarBotClient') readonly grammarBotClient: IGrammarBotClient,
+    private readonly logger: LoggerService,
   ) {}
 
   async checkSpelling(text: string): Promise<SpellValidation> {
-    const response = await this.grammarBotClient.checkGrammar(text);
-    const grammarBotResponse: GrammarBotResponse = JSON.parse(
-      response.body,
-    ) as GrammarBotResponse;
+    this.logger.debug(`Checking spelling for text: ${text}`);
+    const grammarBotResponse: GrammarBotResponseDTO =
+      await this.grammarBotClient.checkGrammar(text);
+
+    this.logger.log(
+      `GrammarBot response: ${JSON.stringify(grammarBotResponse)}`,
+    );
 
     // Extract issues from grammarBotResponse
     const issues: Array<Issue> = grammarBotResponse.matches.map(
-      (issue: Match) => {
+      (issue: MatchDTO) => {
         return {
           type: issue.rule.category.name,
           match: {
@@ -50,6 +55,7 @@ export class SpellingService {
       issues,
     };
 
+    this.logger.debug(`Spell validation: ${JSON.stringify(spellValidation)}`);
     return spellValidation;
   }
 }

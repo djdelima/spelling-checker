@@ -1,68 +1,72 @@
 import { SpellingService } from './spelling.service';
-import { IGrammarBotClient } from './clients/grammar-bot-client';
+import { LoggerService } from '../logger.service';
+import {
+  GrammarBotResponseDTO,
+  IGrammarBotClient,
+} from './clients/grammar-bot-client';
 import { any } from 'jest-mock-extended';
 
 describe('SpellingService', () => {
   let spellingService: SpellingService;
   let grammarBotClient: IGrammarBotClient;
+  let loggerService: LoggerService;
 
   beforeEach(() => {
     grammarBotClient = {
       checkGrammar: jest.fn(),
     } as any;
-    spellingService = new SpellingService(grammarBotClient);
+    loggerService = new LoggerService();
+    spellingService = new SpellingService(grammarBotClient, loggerService);
   });
 
   describe('checkSpelling', () => {
     it('should check spelling of text', async () => {
       const text = 'This is a tst.';
-      const response = {
-        body: JSON.stringify({
-          software: {
-            name: 'GrammarBot',
-            version: '1.0.0',
-            apiVersion: 2,
-            premium: false,
-            premiumHint: '',
-            status: 'OK',
-          },
-          warnings: {
-            incompleteResults: false,
-          },
-          language: {
+      const response: GrammarBotResponseDTO = {
+        software: {
+          name: 'GrammarBot',
+          version: '1.0.0',
+          apiVersion: 2,
+          premium: false,
+          premiumHint: '',
+          status: 'OK',
+        },
+        warnings: {
+          incompleteResults: false,
+        },
+        language: {
+          name: 'English',
+          code: 'en-US',
+          detectedLanguage: {
             name: 'English',
             code: 'en-US',
-            detectedLanguage: {
-              name: 'English',
-              code: 'en-US',
-            },
           },
-          matches: [
-            {
-              message: 'Possible spelling mistake found',
-              shortMessage: 'Spelling mistake',
-              replacements: [{ value: 'test' }],
+        },
+        matches: [
+          {
+            message: 'Possible spelling mistake found',
+            shortMessage: 'Spelling mistake',
+            replacements: [{ value: 'test' }],
+            offset: 10,
+            length: 4,
+            context: {
+              text: 'This is a tst.',
               offset: 10,
               length: 4,
-              context: {
-                text: 'This is a tst.',
-                offset: 10,
-                length: 4,
-              },
-              sentence: 'This is a tst.',
-              type: { typeName: 'misspelling' },
-              rule: {
-                id: 'MORFOLOGIK_RULE_EN_US',
-                description: 'English spellchecker',
-                issueType: 'misspelling',
-                category: {
-                  id: 'TYPOS',
-                  name: 'Possible Typo',
-                },
+            },
+            sentence: 'This is a tst.',
+            type: { typeName: 'misspelling' },
+            rule: {
+              id: 'MORFOLOGIK_RULE_EN_US',
+              description: 'English spellchecker',
+              issueType: 'misspelling',
+              category: {
+                id: 'TYPOS',
+                name: 'Possible Typo',
               },
             },
-          ],
-        }),
+          },
+        ],
       };
       (grammarBotClient.checkGrammar as jest.Mock).mockResolvedValue(response);
 
@@ -76,33 +80,31 @@ describe('SpellingService', () => {
 
     it('should return an empty array of issues if the response body is empty', async () => {
       const text = 'This is a test.';
-      const response = {
-        body: JSON.stringify({
-          software: {
-            name: 'GrammarBot',
-            version: '1.0.0',
-            apiVersion: 2,
-            premium: false,
-            premiumHint: '',
-            status: 'OK',
-          },
-          warnings: {
-            incompleteResults: false,
-          },
-          language: {
+      const response: GrammarBotResponseDTO = {
+        software: {
+          name: 'GrammarBot',
+          version: '1.0.0',
+          apiVersion: 2,
+          premium: false,
+          premiumHint: '',
+          status: 'OK',
+        },
+        warnings: {
+          incompleteResults: false,
+        },
+        language: {
+          name: 'English',
+          code: 'en-US',
+          detectedLanguage: {
             name: 'English',
             code: 'en-US',
-            detectedLanguage: {
-              name: 'English',
-              code: 'en-US',
-            },
           },
-          matches: [],
-        }),
+        },
+        matches: [],
       };
       (grammarBotClient.checkGrammar as jest.Mock).mockResolvedValue(response);
 
-      const service = new SpellingService(grammarBotClient);
+      const service = new SpellingService(grammarBotClient, loggerService);
       const result = await service.checkSpelling(text);
 
       expect(result).toEqual({
@@ -117,7 +119,7 @@ describe('SpellingService', () => {
         throw new Error('An error occurred');
       });
 
-      const service = new SpellingService(grammarBotClient);
+      const service = new SpellingService(grammarBotClient, loggerService);
       await expect(service.checkSpelling('This is a test')).rejects.toThrow(
         'An error occurred',
       );

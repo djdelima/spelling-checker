@@ -1,5 +1,5 @@
-export type GrammarBotResponse = {
-  software: {
+export class GrammarBotResponseDTO {
+  software!: {
     name: string;
     version: string;
     apiVersion: number;
@@ -7,10 +7,10 @@ export type GrammarBotResponse = {
     premiumHint: string;
     status: string;
   };
-  warnings: {
+  warnings!: {
     incompleteResults: boolean;
   };
-  language: {
+  language!: {
     name: string;
     code: string;
     detectedLanguage: {
@@ -18,25 +18,25 @@ export type GrammarBotResponse = {
       code: string;
     };
   };
-  matches: Array<Match>;
-};
+  matches!: Array<MatchDTO>;
+}
 
-export type Match = {
-  message: string;
-  shortMessage: string;
-  replacements: Array<{ value: string }>;
-  offset: number;
-  length: number;
-  context: {
+export class MatchDTO {
+  message!: string;
+  shortMessage!: string;
+  replacements!: Array<{ value: string }>;
+  offset!: number;
+  length!: number;
+  context!: {
     text: string;
     offset: number;
     length: number;
   };
-  sentence: string;
-  type: {
+  sentence!: string;
+  type!: {
     typeName: string;
   };
-  rule: {
+  rule!: {
     id: string;
     description: string;
     issueType: string;
@@ -45,4 +45,4 @@ export type Match = {
       name: string;
     };
   };
-};
+}
