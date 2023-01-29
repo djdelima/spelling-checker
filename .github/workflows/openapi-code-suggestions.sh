@@ -16,7 +16,6 @@ FILES=$(curl -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/re
 # Loop through list of files and get contents of relevant files
 for FILE in $(echo $FILES | jq -r '.[].filename');
 do
-  echo "FILE: $FILE"
     # Check if file extension is in list of relevant extensions
     if [[ $FILE =~ $FILE_EXTENSIONS ]]
     then
@@ -39,10 +38,10 @@ do
        escaped_payload=$(echo "$payload" | jq -c .)
 
 
-        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions"
+        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}""
 
         # Use OpenAI API to generate code suggestions
-        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
+        curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"escaped_payload\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" > suggestions.txt
         echo "Suggestions: $(cat suggestions.txt)"
 
         # Add suggestions as a comment on the pull request
