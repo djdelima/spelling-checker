@@ -2,10 +2,11 @@
 
 # Set API key
 API_KEY="$1"
+GITHUB_TOKEN="$2"
 
 OWNER=djdelima
 REPO=spelling-checker
-PULL_REQUEST_NUMBER=1
+PULL_REQUEST_NUMBER=3
 FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
