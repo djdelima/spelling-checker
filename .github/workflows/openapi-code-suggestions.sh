@@ -20,6 +20,7 @@ do
     if [[ $FILE =~ $FILE_EXTENSIONS ]]
     then
         # Get contents of file
+        echo "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head";
         CONTENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head")
 
         echo "CONTENTS: CONTENTS"
