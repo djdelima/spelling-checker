@@ -26,6 +26,8 @@ do
 
         PROMPT="$PROMPT $(echo $CONTENTS | jq -r '.content' | base64 --decode)"
 
+        echo "-X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions"
+
         # Use OpenAI API to generate code suggestions
         curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
         echo "Suggestions: $(cat suggestions.txt)"
