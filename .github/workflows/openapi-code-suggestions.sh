@@ -10,7 +10,7 @@ FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
 FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files")
-echo "Prompt: FILES"
+echo "FILES: $FILES"
 
 # Loop through list of files and get contents of relevant files
 for FILE in $(echo $FILES | jq -r '.[].filename');
