@@ -30,6 +30,8 @@ do
         # escape the special characters
         PROMPT=$(printf "%q" "$DECODED_CONTENT")
 
+        PROMPT='const a = 1; if (a === 1) { console.log("a is 1"); } else { console.log("a is not 1"); }'
+
 
         # Use OpenAI API to generate code suggestions
         curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
