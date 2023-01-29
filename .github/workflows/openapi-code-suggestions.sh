@@ -2,7 +2,7 @@
 
 # Set API key
 API_KEY="$1"
-GITHUB_TOKEN="$2"
+GITHUB_TOKEN="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"
 GITHUB_EVENT_PATH="$3"
 
 OWNER=djdelima
@@ -11,11 +11,12 @@ PULL_REQUEST_NUMBER=3
 FILE_EXTENSIONS=".ts"
 
 # Get list of files in pull request
-FILES=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files")
+FILES=$(curl -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/pulls/$PULL_REQUEST_NUMBER/files")
 
 # Loop through list of files and get contents of relevant files
 for FILE in $(echo $FILES | jq -r '.[].filename');
 do
+  echo "FILE: $FILE"
     # Check if file extension is in list of relevant extensions
     if [[ $FILE =~ $FILE_EXTENSIONS ]]
     then
@@ -23,12 +24,7 @@ do
         echo "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head";
         CONTENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$OWNER/$REPO/contents/$FILE?ref=pull/$PULL_REQUEST_NUMBER/head")
 
-        echo "CONTENTS: CONTENTS"
-
-        # Get code snippets from pull request
-        PROMPT=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH" | grep -oP '```\n(.*?)\n```' | sed 's/```//g')
-
-        echo "Prompt: $PROMPT"
+        PROMPT="$PROMPT $(echo $CONTENTS | jq -r '.content' | base64 --decode)"
 
         # Use OpenAI API to generate code suggestions
         curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $API_KEY" -d "{\"prompt\":\"$PROMPT\",\"model\":\"code-davinci-002\",\"language\":\"javascript\"}" https://api.openai.com/v1/engines/davinci/completions > suggestions.txt
