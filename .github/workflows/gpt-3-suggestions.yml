@@ -17,8 +17,27 @@ jobs:
         with:
           node-version: 14
 
-      - name: Run script
-        run: bash ${GITHUB_WORKSPACE}/.github/workflows/openapi-code-suggestions.sh $API_KEY $GITHUB_TOKEN $$GITHUB_EVENT_PATH
+      - name: Extract content from webpage
+        run: |
+          npm install cheerio
+          node extract-content.js
+
+      - name: Get pull request content from GitHub API
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            console.log(pullRequest.body);
+
+      - name: Send message to ChatGPT and retrieve suggestions
+        run: |
+          npm install openai
+          node send-message.js
 
       - name: Add suggestions as a comment on the pull request
         uses: peter-evans/create-or-update-comment@v2
