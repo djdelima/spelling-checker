@@ -1,0 +1,45 @@
+name: GPT-3 Suggestions
+on: [pull_request]
+
+jobs:
+  gpt3-suggestions:
+    runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_EVENT_PATH: ${{ secrets.GITHUB_EVENT_PATH }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Extract content from webpage
+        run: |
+          npm install cheerio
+          node extract-content.js
+
+      - name: Get pull request content from GitHub API
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            console.log(pullRequest.body);
+
+      - name: Send message to ChatGPT and retrieve suggestions
+        run: |
+          npm install openai
+          node send-message.js
+
+      - name: Add suggestions as a comment on the pull request
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          body: suggestions.txt
